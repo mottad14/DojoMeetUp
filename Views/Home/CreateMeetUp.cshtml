@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model MeetUp 
+<div class="text-center">
+    <h2>Create a Meet Up</h2>
+        <form action="/meetUp/create" method="post">
+    <div class="row">
+        <div class="col-6">
+                <input type="hidden" asp-for="UserId" value="@ViewBag.CurrentUserId">
+                <div class="form-group">
+                    <label for="Title">Event Title</label>
+                    <input asp-for="Title" class="form-control">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="MeetUpDate">Date and Time</label>
+                    <input asp-for="MeetUpDate" class="form-control">
+                    <span asp-validation-for="MeetUpDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="MeetUpDuration">Duration</label>
+                    <input asp-for="MeetUpDuration" class="form-control">
+                    <span asp-validation-for="MeetUpDuration" class="text-danger"></span>
+                    <span asp-validation-for="MeetUpTimeMetric"></span>
+                    <select asp-for="MeetUpTimeMetric" id="MeetUpTimeMetric">
+                        <option disabled selected> -- select an option -- </option>
+                        <option value="Hours">Hours</option>
+                        <option value="Minutes">Minutes</option>
+                        <option value="Days">Days</option>
+                    </select>
+                </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label for="MeetUpDescription">Description:</label>
+                <textarea asp-for="MeetUpDescription" cols="30" rows="10"></textarea>
+                <span asp-validation-for="MeetUpDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Event" class="btn btn-success">
+            </div>
+        </div>
+    </div>
+    </form>
+    <a class= "btn btn-primary" href="/Dashboard">Dashboard</a>
+</div>
+

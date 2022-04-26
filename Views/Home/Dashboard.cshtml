@@ -1,0 +1,61 @@
+
+<h1>Welcome @ViewBag.LoggedIn.FirstName!</h1>
+
+@{
+    ViewData["Title"] = "Dojo Meet Up Dashboard";
+}
+@Model
+
+<div class="text-center">
+        <span class="display-4"> Dojo Meet Up Center </span><div class="text-right"><a class="btn btn-primary " href="/logout">Log Out</a></div>
+</div>
+
+<div class="text-center">   
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+        <th scope="col">Meet Up</th>
+        <th scope="col">Date and Time</th>
+        <th scope="col">Duration</th>
+        <th scope="col">Event Coordinator</th>
+        <th scope="col">No. of Participants</th>
+        <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody> 
+        @foreach (MeetUp meetup in ViewBag.AllMeetUps)
+        {  
+            if (meetup.MeetUpDate > DateTime.Now)
+            {
+        <tr>
+        <th scope="row"><a href="/OneMeetUp/@meetup.MeetUpId"> @meetup.Title </a></th>
+        <td>@meetup.MeetUpDate.ToString("MM/dd") @("@") @meetup.MeetUpDate.ToString("hh:mm tt")</td>
+        <td>@meetup.MeetUpDuration @meetup.MeetUpTimeMetric</td>
+        <td>@meetup.Planner.FirstName</td>
+        <td>@meetup.Attendees.Count</td>
+        @* if the user that is logged in is also the Owner of the MeetUp event - they should have a delete button *@
+            @if (meetup.UserId == ViewBag.LoggedIn.UserId)
+            {
+                <td> <a class="btn btn-danger" href="/MeetUp/delete/@meetup.MeetUpId">Delete Meet Up</a></td>
+            }
+            @* Otherwise, if the current logged in user is not the creator of the event, but the User ID is on the MeetUp's RSVP List *@
+            else if (meetup.Attendees.Any(g => g.UserId == ViewBag.LoggedIn.UserId))
+            {
+                <td> <a class="btn btn-secondary" href="/RSVP/delete/@meetup.MeetUpId">Leave</a></td>
+            }
+            @* If the current user is neither the creator, nor on the RSVP List - let the user RSVP *@
+            else
+            {
+                <td><a class="btn btn-success" href="/RSVP/create/@meetup.MeetUpId">Join</a></td>
+            }
+        </tr>
+        }
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center">
+<a class= "btn btn-info" href="/meetUp/add">Add New Activity</a>
+</div>
+

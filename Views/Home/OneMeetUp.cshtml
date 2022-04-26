@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "@ViewBag Meet Up Page";
+}
+@model MeetUp
+<div class="text-center">
+    <div class="row">
+        <div class="col-6">
+            <span class="display-4">@ViewBag.ThisOneMeetUp.Title</span> 
+            <p>Event Coordinator: @ViewBag.ThisOneMeetUp.Planner.FirstName</p>
+            <p>@ViewBag.ThisOneMeetUp.MeetUpDescription</p>
+
+            <p class="display-4">Participants</p>
+            @foreach (RSVP user in ViewBag.ThisOneMeetUp.Attendees)
+            {
+                <p>@user.Guest.FirstName</p>
+            }
+        </div>
+
+        <div class="col-6">
+        @if(ViewBag.ThisOneMeetUp.Planner.UserId == ViewBag.LoggedIn.UserId)
+        {
+            <a class="btn btn-danger" href="/MeetUp/delete/@ViewBag.ThisOneMeetUp.MeetUpId">Delete MeetUp</a>
+        }
+        else if(Model.Attendees.Any(U=>U.Guest.UserId == ViewBag.LoggedIn.UserId))            
+        {
+            <a class="btn btn-secondary" href="/RSVP/delete/@ViewBag.ThisOneMeetUp.MeetUpId">Leave</a>
+        }
+
+        else
+            {
+                <a class="btn btn-success" href="/RSVP/create/@ViewBag.ThisOneMeetUp.MeetUpId">Join</a>
+            }
+        </div>
+    </div>
+</div>
+
